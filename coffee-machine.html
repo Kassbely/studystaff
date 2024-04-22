@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+      integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="img/cup.ico" />
+    <title>Кофемат</title>
+    <style>
+      body {
+        background-image: url(img/back.jpg);
+        background-repeat: repeat;
+        font-family: "Play", sans-serif;
+        .coffee_block {
+          background-color: hsl(42, 9%, 50%);
+          border: 1px solid black;
+          border-radius: 4px;
+          margin-bottom: 1rem; /* добавляем сразу так как после будет идти следующая кнопка */
+          filter: drop-shadow(4px 2px 4px);
+          border-radius: 50px;
+        }
+        .coffee_btn {
+          width: 50px;
+          height: 100px;
+          border: 2px solid hsl(21, 23%, 41%);
+          border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+          background: hsl(21, 23%, 41%);
+          margin-left: 50px;
+          cursor: pointer;
+        }
+        .coffee_btn:hover {
+          width: 50px;
+          height: 100px;
+          border: 2px solid hsl(22, 47%, 60%);
+          border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+          background: hsl(22, 47%, 60%);
+        }
+
+        .coffee_block span {
+          font-size: 2rem;
+          line-height: 100px; /*выравниваем по блоку, что бы не мучится с флексом */
+          vertical-align: middle;
+          color: white;
+          padding-left: 2rem;
+        }
+        .money-container {
+          row-gap: 10px;
+        }
+      }
+      #displayInfo {
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+      #display {
+        width: 100%;
+        height: 230px;
+        background: linear-gradient(
+          to bottom,
+          hsl(27.1, 100%, 24.31%),
+          hsla(25.07, 91.06%, 25.8%, 0.972) 16.298%,
+          hsla(18.77, 71.3%, 29.84%, 0.896) 27.533%,
+          hsla(7, 51%, 36%, 0.925) 30.245%,
+          hsla(347, 45%, 39%, 0.973) 40.974%,
+          hsla(330, 49%, 32%, 0.911) 50.263%,
+          hsla(315, 49%, 29%, 0.774) 60.65%,
+          hsla(297, 56%, 20%, 0.849) 75.883%,
+          hsla(291, 57%, 19%, 0.788) 99.811%
+        );
+        border: 2px dotted hsl(22, 47%, 60%);
+        text-align: center;
+        padding: 10px;
+        color: white;
+      }
+      img[src$="rub.jpg"]:hover {
+        filter: contrast(150%);
+        cursor: pointer;
+      }
+      .animated {
+        animation-name: hide-bill;
+        animation-duration: 0.2s;
+        animation-timing-function: ease-out;
+      }
+      @keyframes hide-bill {
+        0% {
+          opasity: 1;
+          transform: rotate(-90deg) rotateY(20deg);
+        }
+        50% {
+          transform: rotate(-90deg) rotateY(60deg);
+        }
+        100% {
+          opasity: 0;
+          transform: rotate(-90deg) rotateY(85deg);
+        }
+      }
+      .progress {
+        height: 1.3rem;
+        border-radius: 0.4rem;
+      }
+      .progress-Bar {
+        background-color: whitesmoke;
+      }
+      .fa-regular,
+      .fa-solid {
+        font-size: 1.5rem;
+        color: whitesmoke;
+      }
+      #changeBox {
+        width: 100%;
+        height: 200px;
+        position: relative;
+        margin-top: 1rem;
+        margin-left: 15px;
+        background-color: hsla(288, 24%, 64%, 0.658);
+        border: 2px solid black;
+        border-radius: 4px;
+      }
+      .get-change {
+        background-color: rgb(117, 69, 113);
+        border: 0;
+        margin-top: 1rem;
+        color: azure;
+      }
+      .get-change:hover {
+        background-color: rgb(175, 138, 172);
+        color: azure;
+      }
+      img[src$="rub.png"] {
+        width: 60px;
+        position: absolute;
+      }
+      img[src$="rub.png"]:hover {
+        filter: contrast(150%);
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="row coffee_block">
+            <div class="coffee_btn" onclick="getCoffee(158, 'Эспрессо')"></div>
+            <span>Эспрессо - 158 руб</span>
+          </div>
+          <div class="row coffee_block" onclick="getCoffee(234, 'Капучино')">
+            <div class="coffee_btn"></div>
+            <span>Капучино -234 руб</span>
+          </div>
+          <div class="row coffee_block" onclick="getCoffee(213, 'Латте')">
+            <div class="coffee_btn"></div>
+            <span>Латте - 213 руб</span>
+          </div>
+          <div class="row coffee_block" onclick="getCoffee(317, 'Моккачино')">
+            <div class="coffee_btn"></div>
+            <span>Моккачино - 317 руб</span>
+          </div>
+          <div class="row coffee_block" onclick="getCoffee(49, 'Какао')">
+            <div class="coffee_btn"></div>
+            <span>Какао - 49 руб</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-6">
+              <div id="display">
+                <p id="displayInfo">
+                  <i class="fa-solid fa-mug-hot"></i> &nbsp; Внесите деньги
+                </p>
+                <p id="balance">
+                  <i class="fa-solid fa-credit-card"></i> &nbsp; Баланс: 0 руб.
+                </p>
+                <div class="progress" hidden>
+                  <div class="progress-bar"></div>
+                </div>
+              </div>
+              <button
+                class="btn btn-lg btn-block get-change"
+                id="changeButton"
+                onclick="getChange(money.value,this)"
+                disabled
+              >
+                Забрать сдачу
+              </button>
+            </div>
+            <div class="col-md-6">
+              <input type="hidden" id="money" />
+              <img src="img/bill_acc.png" alt="" />
+            </div>
+            <div id="changeBox"></div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-wrap justify-content-around money-container">
+        <img src="img/50rub.jpg" alt="" id="test" data-bill-value="50" />
+        <img src="img/100rub.jpg" alt="" data-bill-value="100" />
+        <img src="img/200rub.jpg" alt="" data-bill-value="200" />
+        <img src="img/500rub.jpg" alt="" data-bill-value="500" />
+      </div>
+    </div>
+
+    <script>
+      let money = document.getElementById("money");
+      let display = document.getElementById("displayInfo");
+      let bills = document.querySelectorAll("img[src$='rub.jpg']");
+      let bill_acc = document.querySelector("img[src$='acc.png']");
+      let balance = document.getElementById("balance");
+      let changeBox = document.getElementById("changeBox");
+      let coin = document.querySelectorAll("img[src$='rub.png']");
+
+      for (let bill of bills) {
+        bill.onmousedown = function (e) {
+          bill = e.currentTarget;
+          bill.style.position = "absolute";
+          bill.style.zIndex = 1000;
+          bill.style.transform = "rotate(90deg)";
+
+          document.addEventListener("mousemove", moveBill);
+
+          bill.onmouseup = function () {
+            document.removeEventListener("mousemove", moveBill);
+            bill.style.zIndex = 1;
+
+            let bill_top = bill.getBoundingClientRect().top;
+            let bill_left = bill.getBoundingClientRect().left;
+            let bill_right = bill.getBoundingClientRect().right;
+
+            let bill_acc_top = bill_acc.getBoundingClientRect().top;
+            let bill_acc_left = bill_acc.getBoundingClientRect().left;
+            let bill_acc_right = bill_acc.getBoundingClientRect().right;
+            let bill_acc_bottom =
+              bill_acc.getBoundingClientRect().bottom -
+              (bill_acc.getBoundingClientRect().height / 3) * 2;
+
+            if (
+              bill_top > bill_acc_top &&
+              bill_left > bill_acc_left &&
+              bill_right < bill_acc_right &&
+              bill_top < bill_acc_bottom
+            ) {
+              bill.classList.add("animated");
+              setTimeout(function () {
+                bill.hidden = true;
+              }, 190);
+              money.value = +money.value + +bill.dataset.billValue;
+              changeAmount(money.value);
+            }
+          };
+
+          function moveBill(event) {
+            let x = event.clientX - 150;
+            let y = event.clientY - 65;
+            bill.style.top = y + "px";
+            bill.style.left = x + "px";
+          }
+        };
+
+        bill.ondragstart = function () {
+          return false;
+        };
+      }
+
+      function startProgressBar(drinkName) {
+        let i = 0;
+        let progressBar = document.querySelector(".progress-bar");
+        progressBar.parentElement.hidden = false;
+
+        function progress() {
+          i++;
+          progressBar.style.width = i + "%";
+          progressBar.innerText = i + "%";
+
+          if (i == 100) {
+            clearInterval(timerId);
+            progressBar.style.width = 0 + "%";
+            progressBar.parentElement.hidden = true;
+            display.innerHTML = `<i class="fa-regular fa-face-smile fa-fade"></i> &nbsp; Ваш  ${drinkName} готов!`;
+          } else if (i == 5) {
+            display.innerHTML = `<i class="fa-regular fa-clock fa-shake"></i> &nbsp; Приготовление ${drinkName} началось`;
+          } else if (i == 80) {
+            display.innerHTML = `<i class="fa-regular fa-clock fa-shake"></i> &nbsp; ${drinkName} почти готов`;
+          }
+        }
+        let timerId = setInterval(progress, 100);
+      }
+
+      function getCoffee(price, name) {
+        if (money.value >= price) {
+          money.value = money.value - price;
+          changeAmount(money.value);
+          startProgressBar(name);
+        } else {
+          display.innerHTML = `<i class="fa-regular fa-face-sad-tear"></i> &nbsp; Не хватает средств на ${name}`;
+        }
+      }
+
+      function changeAmount(value) {
+        balance.innerHTML = `<i class="fa-solid fa-credit-card"></i> &nbsp; Баланс: ${value} руб.`;
+        if (value > 0) {
+          document.getElementById("changeButton").disabled = false;
+        } else {
+          document.getElementById("changeButton").disabled = true;
+        }
+      }
+
+      function getChange(num, button) {
+        if (money.value == 0) return;
+        let top = getRandom(0, changeBox.getBoundingClientRect().height - 65);
+        let left = getRandom(0, changeBox.getBoundingClientRect().width - 65);
+
+        if (num >= 10) coin = 10;
+        else if (num >= 5) coin = 5;
+        else if (num >= 2) coin = 2;
+        else if (num >= 1) coin = 1;
+
+        let sound = new Audio("img/money.mp3");
+        sound.play();
+
+        console.log(coin);
+        changeBox.innerHTML += `<img src="img/${coin}rub.png" style="top: ${top}px; left: ${left}px" onclick="hidecoin(this)">`;
+        money.value = num - coin;
+        balance.innerHTML = `<i class="fa-solid fa-credit-card"></i> &nbsp; Баланс: ${money.value} руб.`;
+        if (money.value > 0) getChange(money.value, button);
+        else button.disabled = true;
+      }
+
+      function getRandom(min, max) {
+        return Math.random() * (max - min) + min; //не дает выйти за пределы диапазона
+      }
+
+      function hidecoin(coin) {
+        coin.style.display = "none";
+      }
+
+      function ternGetChange(num) {
+        let coin =
+          num >= 10
+            ? 10
+            : num >= 5
+            ? 5
+            : num >= 2
+            ? 2
+            : num >= 1
+            ? 1
+            : "Вся сдача выдана";
+        console.log(coin);
+        if (num - coin != 0) ternGetChange(num - coin);
+      }
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/af6980f956.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
