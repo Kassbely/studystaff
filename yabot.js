@@ -44,11 +44,10 @@ if (yaBtn !== undefined) {
     }
     if (nextPage) {
       setTimeout(() => {
-        document.querySelector(".VanillaReact Pager-Item Pager-Item_type_next").click();
+        document.querySelector('[aria-label="Следующая страница"]').click();
       }, getRandom(2500,3500))
     }
   }
 function getRandom(min,max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
-
