@@ -6,65 +6,73 @@
 // @author       Belyakova Alexandra
 // @match        https://ya.ru/*
 // @match        https://htmlbook.ru/*
+// @match        https://learn.javascript.ru/*
+// @match        https://your-tailor.ru/*
 // @grant        none
 // ==/UserScript==
 
 let yaInput = document.getElementsByName('text')[0];
 let yaBtn = document.getElementsByClassName("search3__button mini-suggest__button")[0];
 let links = document.links;
-let keywords = ["CSS-анимация для начинающих", "Справочник по HTML"];
+let sites = {
+  "htmlbook.ru": ["CSS-анимация для начинающих", "Справочник по HTML"],
+  "learn.javascript.ru": ["Современный учебник JavaScript", "DOM", "Массивы"],
+  "your-tailor.ru": ["выкройка майка алкоголичка", "видеоуроки по пошиву", "магазин выкроек"],
+}
+let sitesKeys = Object.keys(sites);
+let site = sitesKeys[getRandom(0, sitesKeys.length)];
+let keywords = sites[site];
 let keyword = keywords[getRandom(0, keywords.length)];
-
 
 let mouseClick = new MouseEvent("click");
 
 //Работаем на главной странице
-if (yaBtn !== undefined) {
 let i = 0;
- //  yaInput.focus();
- //  yaInput.dispatchEvent(mouseClick);
- //  yaInput.value = keyword;
- //  yaBtn.click();
-
-   let timerId = setInterval(() => {
-     yaInput.value += keyword[i];
-     i++;
+if (yaBtn !== undefined) {
+  document.cookie = `site=${site}`; // первый site это название куки
+} else if (location.hostname == "ya.ru") {
+  site = getCookie("site"); // первый site это название куки
+} else {
+  site = location.hostname;
+}
+if (yaBtn !== undefined) {
+  //  yaInput.focus();
+  //  yaInput.dispatchEvent(mouseClick);
+  //  yaInput.value = keyword;
+  //   yaBtn.click();
+  document.cookie = `site = ${site}`;
+  let timerId = setInterval(() => {
+    yaInput.value += keyword[i];
+    i++;
     if (i == keyword.length) {
       clearInterval(timerId);
       yaBtn.click();
     }
-   },150)
+  },150)
   //Работаем на целевом сайте
-  } else if (location.hostname == "htmlbook.ru") {
+  } else if (location.hostname == site) {
 
     setInterval(() => {
-      let linkIndex = getRandom(0, links.length);
-      let localLink = links[linkIndex];
+      let index = getRandom(0, links.length);
 
-      if (getRandom(0, 101) > 50) {
+      if (getRandom(0, 101) >= 80) {
         location.href = "https://ya.ru/";
-      }
-      if (links.length == 0) {
-        location.href = "https://htmlbook.ru/";
-      }
-
-      if (localLink.href.includes("htmlbook.ru")) {
-        localLink.click();
-      }
-    }, getRandom(5000, 7000))
-
+    } else if (links[index].href.indexOf(site) !== -1) {
+      links[index].click();
+    }
+  }, getRandom(2500, 4500));
     console.log("Мы на целевом сайте");
-  }
+}
 //Работаем на странице поисковой выдачи
 else if (document.querySelector(".Pager-Content") !== null){
   let nextPage = true;
   for (let i = 0; i < links.length; i++) {
-    if (links[i].href.indexOf("htmlbook.ru") != -1) {
+    if (links[i].href.indexOf(site) != -1) {
       let link = links[i];
       let nextPage = false;
       console.log("Нашел строку " + link);
       setTimeout(() => {
-        link.target = '_self';
+        //link.target = '_self';
         link.click();
       }, getRandom(2000, 3000));
       break;
@@ -94,3 +102,14 @@ function getRandom(min,max) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
+function getCookie(name) {
+  let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+//this.link.forEach(link => link.removeAttribute('target'));
+
+//(function() {
+//   'use strict'; Array.from(document.querySelectorAll('a[target="_blank"]'))
+//   .forEach(link => link.removeAttribute('target'));})();
