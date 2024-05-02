@@ -32,7 +32,7 @@ if ($mysqli == false) {
      $pass = $_POST["pass"];
 
      $result = $mysqli->query("SELECT * FROM `users` WHERE `email` = '$email'");
-     if (result->num_rows != 0) {
+     if ($result->num_rows != 0) {
           print("Пользователь с такой почтой уже существует");
      } else {
           $mysqli->query("INSERT INTO `users`(`name`, `surname`, `email`, `pass`) VALUES ('$name', '$surname', '$email', '$pass')");
