@@ -10,7 +10,9 @@ if ($url[1] == "login") {
   $content = file_get_contents("pages/tracking-order.html");
 } else if ($url[1] == "users") {
   require_once("pages/users/index.html");
-} else {
+} else if ($url[1] == "addUser") {
+User ::addUser();
+} else{
   $content = file_get_contents("pages/index.php");
 }
 
